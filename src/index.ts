@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import { client } from './config/eureka-client.js';
 import type { Request, Response } from 'express';
 import { generateFeedback } from './infrastructure/ai-providers/VercelAIService.js';
 
@@ -19,10 +20,30 @@ app.post('/api/v1/code-analysis/test', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'UP' });
+});
+
+app.get('/info', (req, res) => {
+  res.json({ 
+    app: 'code-analysis-service', 
+    description: 'AI-powered code analysis tutor' 
+  });
+});
+
 app.get('/', (req: Request, res: Response) => {
   res.send('Code Analysis Service is active');
 });
 
 app.listen(port, () => {
   console.log(`Code Analysis Service is running on http://localhost:${port}`);
+});
+
+['SIGINT', 'SIGTERM'].forEach((signal) => {
+  process.on(signal, () => {
+  client.stop((error) => {
+    console.log('Unregistered from Eureka');
+    process.exit(error ? 1 : 0);
+  });
+});
 });
