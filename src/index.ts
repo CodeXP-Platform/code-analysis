@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import { client } from './config/eureka-client.js';
+import { initRabbitMQ } from './infrastructure/messasing/RabbitMQClient.js';
 import type { Request, Response } from 'express';
 import { generateFeedback } from './infrastructure/ai-providers/VercelAIService.js';
 
@@ -38,6 +39,8 @@ app.get('/', (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`Code Analysis Service is running on http://localhost:${port}`);
 });
+
+initRabbitMQ();
 
 ['SIGINT', 'SIGTERM'].forEach((signal) => {
   process.on(signal, () => {
