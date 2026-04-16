@@ -4,6 +4,7 @@ import { client } from './config/eureka-client.js';
 import { initRabbitMQ } from './infrastructure/messasing/RabbitMQClient.js';
 import type { Request, Response } from 'express';
 import { generateFeedback } from './infrastructure/ai-providers/VercelAIService.js';
+import reviewRoutes from './interfaces/routes/reviewRoutes.js';
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,8 @@ app.post('/api/v1/code-analysis/test', async (req, res) => {
     res.status(500).json({ error: 'La IA falló', details: error });
   }
 });
+
+app.use('/api/v1/code-analysis', reviewRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'UP' });

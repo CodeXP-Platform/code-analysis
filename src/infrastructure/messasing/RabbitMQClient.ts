@@ -1,5 +1,8 @@
 import amqp from 'amqplib';
 import { generateFeedback } from '../ai-providers/VercelAIService.js';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 export const initRabbitMQ = async () => {
   try {
@@ -29,15 +32,30 @@ export const initRabbitMQ = async () => {
           
           const feedback = await generateFeedback(code, JSON.stringify(testResults));
 
+          
+          const savedReview = await prisma.codeReview.create({
+            data: {
+              solutionId: eventData.data.solutionId,
+              userId: eventData.data.userId,
+              status: 'COMPLETED',
+              aiScore: feedback.aiScore,
+              feedback: feedback.summary,
+              suggestions: feedback.suggestions, 
+            }
+          });
+          
           console.log('Feedback generado para:', eventData.data.solutionId);
-
+          
           const analysisResults = {
             solutionId: eventData.data.solutionId,
             aiScore: feedback.aiScore,
             status: feedback.status,
           };
 
-          await publishAnalysisReady(channel, analysisResults);
+          await publishAnalysisReady(channel, {
+            ...analysisResults,
+            reviewId: savedReview.id,
+          });
 
           
           channel.ack(msg);
