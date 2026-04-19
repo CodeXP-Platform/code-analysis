@@ -26,12 +26,14 @@
   },
   "dependencies": {
     "@ai-sdk/groq": "^3.0.35",
+    "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "@rocketsoftware/eureka-js-client": "^4.5.9",
     "ai": "^6.0.158",
     "amqplib": "^1.0.3",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",
+    "pg": "^8.20.0",
     "zod": "^4.3.6"
   }
 }
