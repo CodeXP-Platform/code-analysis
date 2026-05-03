@@ -41,6 +41,7 @@ export const getReviewBySolutionId = async (req: Request, res: Response) => {
 
 export const getReviewByAttemptId = async (req: Request, res: Response) => {
     try {
+        console.log("executing getReviewByAttemptId");
         const { solutionId, attemptId } = req.params;
         const userId = (req as any).userId;
 
