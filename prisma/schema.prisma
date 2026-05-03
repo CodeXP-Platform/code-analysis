@@ -5,21 +5,23 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  engineType = "library"
+    provider   = "prisma-client-js"
+    engineType = "library"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
 }
 
 model CodeReview {
-  id          String   @id @default(uuid())
-  solutionId  String   @unique
-  userId      String
-  status      String  
-  aiScore     Int
-  feedback    String   @db.Text
-  suggestions Json    
-  createdAt   DateTime @default(now())
+    id          String   @id @default(uuid())
+    solutionId  String
+    attemptId   String   @unique
+    challengeId String?
+    userId      String
+    status      String   @default("QUEUED")
+    aiScore     Int?
+    feedback    String?  @db.Text
+    suggestions Json?
+    createdAt   DateTime @default(now())
 }
