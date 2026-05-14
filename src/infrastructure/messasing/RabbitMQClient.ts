@@ -16,7 +16,7 @@ export const initRabbitMQ = async () => {
     try {
         //conexion y bandeja de entrada
         const connection = await amqp.connect(
-            process.env.RABBIT_URL || "amqp://rabbitmq:rabbitmq@localhost:5672",
+            process.env.RABBITMQ_URL || "amqp://rabbitmq:rabbitmq@localhost:5672",
         );
         const channel = await connection.createChannel();
 
