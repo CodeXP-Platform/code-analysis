@@ -25,9 +25,13 @@ const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
     const token = authHeader.split(" ")[1];
     try {
         // Asume que la variable de entorno JWT_SECRET existe
-        const secret = Buffer.from(process.env.JWT_SECRET || "tu_secreto_por_defecto", "base64");
-        console.log("SECRET ", secret);
-        const decoded = jwt.verify(token, secret, { algorithms: ["HS256"] }) as { sub?: string };
+        const secret = Buffer.from(
+            process.env.JWT_SECRET || "tu_secreto_por_defecto",
+            "base64",
+        );
+        const decoded = jwt.verify(token, secret, {
+            algorithms: ["HS256"],
+        }) as { sub?: string };
         // El id del usuario suele venir en 'sub' (subject) o 'id'
         (req as any).userId = decoded.sub || (decoded as any).id;
         next();
