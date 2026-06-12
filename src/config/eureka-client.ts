@@ -11,6 +11,9 @@ const advertisedPort = Number(process.env.EUREKA_INSTANCE_PORT) || port;
 // Ubicación del servidor Eureka.
 const eurekaHost = process.env.EUREKA_HOST || "localhost";
 const eurekaPort = Number(process.env.EUREKA_PORT) || 8761;
+// En Azure el ingress externo redirige HTTP->HTTPS (301) y el cliente degrada
+// el POST de registro a GET -> 404. Con SSL hablamos HTTPS directo (puerto 443).
+const eurekaSsl = process.env.EUREKA_SSL === "true";
 
 export const client = new Eureka({
     instance: {
@@ -33,6 +36,7 @@ export const client = new Eureka({
         host: eurekaHost,
         port: eurekaPort,
         servicePath: "/eureka/apps/",
+        ssl: eurekaSsl,
     },
 });
 
