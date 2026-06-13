@@ -22,7 +22,7 @@ const verifyJwt = (req: Request, res: Response, next: NextFunction) => {
             .json({ message: "No se proporcionó token o formato inválido" });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.slice(7);
     try {
         // Asume que la variable de entorno JWT_SECRET existe
         const secret = Buffer.from(

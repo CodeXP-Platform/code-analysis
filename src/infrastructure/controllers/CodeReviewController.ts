@@ -42,7 +42,9 @@ export const getReviewBySolutionId = async (req: Request, res: Response) => {
 export const getReviewByAttemptId = async (req: Request, res: Response) => {
     try {
         console.log("executing getReviewByAttemptId");
-        const { solutionId, attemptId } = req.params;
+        const { solutionId } = req.params;
+        const rawAttemptId = req.params.attemptId;
+        const attemptId = Array.isArray(rawAttemptId) ? rawAttemptId[0] : rawAttemptId;
         const userId = (req as any).userId;
 
         if (!solutionId || !attemptId) {
